@@ -1,4 +1,4 @@
-#include <../lib/ezlib.h>
+#include "../lib/ezlib.h"
 #include <iostream>
 
 class Date{
@@ -37,23 +37,23 @@ class Date{
             return mMonth > 6 && mMonth < 10 ? true : false;
         }
         
-        void setDay(u8 day) {
+        void setDay(const i16 day) {
             if(day > 12) return;
             mDay = day;
         }
-        void setMonth(u8 month) {
+        void setMonth(const i16 month) {
             if(month > 12) return;
             mMonth = month;
         } 
-        void setYear(u32 year) {mYear = year;}
+        void setYear(const u32 year) {mYear = year;}
 
-        const u8 getDay()   const {return mDay;}
-        const u8 getMonth() const {return mMonth;} 
+        const i16 getDay()   const {return mDay;}
+        const i16 getMonth() const {return mMonth;} 
         const u32 getYear() const {return mYear;}
     private:
         u32 mYear;  //birthYear
-        u8  mDay;
-        u8  mMonth;
+        i16  mDay;
+        i16  mMonth;
 };
 
 class Time{
@@ -81,39 +81,62 @@ class Time{
         void passMinute(){
             if(mMinute >= 59){
                 passHour();
-                mMinute = 1;
-            }    
+                mMinute = 0;
+            }
             else mMinute++;
         }
         void passHour(){
-            if(mHour >= 23)
-                mHour = 0;
-            mHour++;
+            if(mHour >= 23) mHour = 0;
+            else mHour++;
         }
 
-        void setSecond(u8 sec) {
-            if(sec > 59) return;
+        void setSecond(const i16 sec) {
+            if(sec > 59) throw std::invalid_argument("Seconds can't be more than 59");
             mSec = sec;
         }
-        void setMinute(u8 minute) {
-            if(minute > 59) return;
+        void setMinute(const i16 minute) {
+            if(minute > 59) throw std::invalid_argument("Minutes can't be more than 59");
             mMinute = minute;
         } 
-        void setHour(u8 hour) {
-            if(hour > 23) return;
+        void setHour(const i16 hour) {
+            if(hour > 23) throw std::invalid_argument("Hours can't be more than 24");;
             mHour = hour;
         }
 
-        const u8 getSecond() const {return mSec;}
-        const u8 getMinute() const {return mMinute;} 
-        const u8 getHour()  const {return mHour;}
+        const i16 getSecond() const {return mSec;}
+        const i16 getMinute() const {return mMinute;} 
+        const i16 getHour()  const {return mHour;}
     private:
-        u8  mHour;
-        u8  mSec;
-        u8  mMinute;
+        i16  mHour;
+        i16  mSec;
+        i16  mMinute;
 };
 
 int main(){
+    Date date;
+    date.setDay(30);
+    date.setMonth(6);
+    date.setYear(2026);
+    std::cout << "Initial date:" << std::endl;
+    date.printDate();
+
+    date.passDay();
+    std::cout << "After passDay:" << std::endl;
+    date.printDate();
+    std::cout << "Is summer vacation: " << date.isSummerVacation() << std::endl;
+
+    Time time;
+    time.setHour(23);
+    time.setMinute(59);
+    time.setSecond(58);
+    std::cout << "\nInitial time: ";
+    time.printTime();
+
+    time.passSecond();
+    time.passSecond();
+    std::cout << "After 2 seconds: ";
+    time.printTime();
+    std::cout << "Is night: " << time.isNight() << std::endl;
 
     return 0;
 }

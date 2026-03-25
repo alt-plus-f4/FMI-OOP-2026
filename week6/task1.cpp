@@ -1,4 +1,4 @@
-#include <../lib/ezlib.h>
+#include "../lib/ezlib.h"
 #include <iostream>
 
 class Student{
@@ -8,10 +8,10 @@ class Student{
             mYear = 2005;
             mGrade = 6.7;
         }
-        bool canGetScolarship(f32 minGrade){
+        bool canGetScolarship(const f32 minGrade){
             return mGrade >= minGrade ? true : false;
         }
-        u8 getYearInUni(u32 currYear){
+        u8 getYearInUni(const u32 currYear){
             return currYear - 19 - mYear;
         }
 
@@ -21,13 +21,13 @@ class Student{
             std::cout << "Birth Year: " << mYear << std::endl;
             std::cout << "Grade: " << mGrade << std::endl;
         }
-        void setName(u8 *name) {
-            if(!name) return;
-            if(strlen_t(name) >= 32) return;
+        void setName(const u8 *name) {
+            if(!name) throw std::invalid_argument("Name can't be empty");
+            if(strlen_t(name) >= 32) throw std::invalid_argument("Name len (1-32)");
             strcpy_t(mName, name);
         }
-        void setYear(u32 year) {mYear = year;} 
-        void setGrade(f32 grade) {mGrade = grade;}
+        void setYear(const u32 year) {mYear = year;} 
+        void setGrade(const f32 grade) {mGrade = grade;}
         const u8* getName() const {return mName;}
         const u32 getYear() const {return mYear;} 
         const f32 getGrade() const {return mGrade;}
@@ -38,6 +38,18 @@ class Student{
 };
 
 int main(){
-    
+    Student s;
+    s.printStudent();
+
+    s.setName((u8*) "Valentin");
+    s.setYear(2004);
+    s.setGrade(5.75f);
+
+    std::cout << "\nAfter updates:" << std::endl;
+    s.printStudent();
+
+    std::cout << "Scholarship (>= 5.50): " << s.canGetScolarship(5.50f) << std::endl;
+    std::cout << "Year in uni (2026): " << static_cast<int>(s.getYearInUni(2026)) << std::endl;
+
     return 0;
 }
