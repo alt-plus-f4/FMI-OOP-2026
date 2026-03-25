@@ -1,5 +1,4 @@
-#ifndef LIB_EZLIB_H
-#define LIB_EZLIB__H
+#pragma once
 #define NULL (void *) 0;
 
 #include <cstdint>
@@ -52,6 +51,3 @@ void strcpy_t(u8 *dest, const u8 *src){
     for(u32 i = 0; i < strlen_t(src); i++) dest[i] = src[i];
     dest[strlen_t(src)] = '\0';
 }
-
-#endif
-
