@@ -1,5 +1,4 @@
 #pragma once
-#define NULL (void *) 0;
 
 #include <cstdint>
 
@@ -51,3 +50,29 @@ void strcpy_t(u8 *dest, const u8 *src){
     for(u32 i = 0; i < strlen_t(src); i++) dest[i] = src[i];
     dest[strlen_t(src)] = '\0';
 }
+
+char* goodMalloc(const char *str){
+    if(!str) return nullptr;
+    char *newStr = nullptr;
+
+    try{
+        newStr = new char[strlen_t(str)];
+        return newStr;
+    } catch(std::exception e){
+        std::cout << e.what();
+    }
+}
+
+// char* goodMalloc(char *str, void (*foo)(std::exception e) = nullptr){
+//     if(!str) return nullptr;
+    
+//     char *newStr = nullptr;
+
+//     try{
+//         newStr = new char[strlen_t(str)];
+//         return newStr;
+//     } catch(std::exception e){
+//         if(!foo) return nullptr;
+//         foo(e);
+//     }
+// }
