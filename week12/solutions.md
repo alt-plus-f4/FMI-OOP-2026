@@ -35,16 +35,12 @@ public:
 		return name;
 	}
 
-	//a virtual function can have a body and it can be useful
-	virtual void print() const = 0
-	{
-		std::cout << "I am an animal\n";
-	}
-
+	//a virtual function can have a body (outside the class) and it can be useful
+	virtual void print() const = 0;
 	virtual void makeSound() const = 0;
 	virtual Animal* clone() const = 0;
 protected:
-	char* name;
+	char* name = nullptr;
 	unsigned age;
 
 	void swap(Animal& other)
@@ -53,6 +49,11 @@ protected:
 		std::swap(age, other.age);
 	}
 };
+
+void Animal::print() const
+{
+	std::cout << "I am an animal\n";
+}
 
 class Cat : public Animal
 {
@@ -69,9 +70,13 @@ public:
 
 	Cat& operator=(const Cat& other)
 	{
-		Cat copy(other);
-		Animal::swap(copy);
-		std::swap(breed, copy.breed);
+		if (&other != this)
+		{
+			Cat copy(other);
+			Animal::swap(copy);
+			std::swap(breed, copy.breed);
+		}
+		return *this;
 	}
 
 	void print() const override
@@ -85,7 +90,7 @@ public:
 		std::cout << "meow\n";
 	}
 
-	Cat* clone() const override
+	Animal* clone() const override
 	{
 		return new Cat(*this);
 	}
@@ -104,7 +109,7 @@ public:
 		breed = temp;
 	}
 private:
-	char* breed;
+	char* breed = nullptr;
 };
 
 class Dog : public Animal
@@ -123,7 +128,7 @@ public:
 	{
 		std::cout << "Arf\n";
 	}
-	Dog* clone() const override
+	Animal* clone() const override
 	{
 		return new Dog(*this);
 	}
@@ -199,7 +204,7 @@ public:
 		{
 			if (strcmp(name, animals[i]->getName()) == 0)
 			{
-				delete[] animals[i];
+				delete animals[i];
 				for (int j = i; j < size - 1; j++)
 				{
 					animals[j] = animals[j + 1];
